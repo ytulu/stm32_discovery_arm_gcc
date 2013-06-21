@@ -1,6 +1,6 @@
 #Modify BINPATH to point to where you installed the ARM cross compiler binaries
 STM_COMMON = ../STM32F4-Discovery_FW_V1.1.0
-BINPATH = ~/gnu.tools.for.ARM.Embedded.Processors/gcc-arm-none-eabi-4_7-2012q4/bin/
+BINPATH = /home/ytulu/code/gcc-arm-none-eabi-4_7-2013q1/bin/
 
 
 # Sources
@@ -63,7 +63,7 @@ OBJS = $(SRCS:.c=.o)
 
 .PHONY: lib proj
 
-all: proj
+all: lib proj
 	$(SIZE) $(OUTPATH)/$(PROJ_NAME).elf
 
 proj: $(OUTPATH)/$(PROJ_NAME).elf
@@ -73,9 +73,14 @@ $(OUTPATH)/$(PROJ_NAME).elf: $(SRCS)
 	$(OBJCOPY) -O ihex $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).bin
 
+lib: | $(OUTPATH)
+
+$(OUTPATH):
+	mkdir $(OUTPATH)
 clean:
 	find . -name \*.o -type f -delete
 	find . -name \*.lst -type f -delete
 	rm -f $(OUTPATH)/$(PROJ_NAME).elf
 	rm -f $(OUTPATH)/$(PROJ_NAME).hex
 	rm -f $(OUTPATH)/$(PROJ_NAME).bin
+	rm -rf $(OUTPATH)
